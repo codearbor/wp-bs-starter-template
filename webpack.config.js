@@ -2,6 +2,8 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+//const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -14,11 +16,20 @@ module.exports = {
     clean: true,
     publicPath: '../',
   },
+  target: ["web", "es5"],
+  resolve: {
+    extensions: ['.js'],
+  },
   module: {
     rules: [
       {
         test: /.s?css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
+      },
+      {
+        test: /\.js$/i,
+        exclude: /(node_modules|bower_components)/,
+        use: ['babel-loader']
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -36,9 +47,16 @@ module.exports = {
       },
     ]
   },
-  plugins: [new MiniCssExtractPlugin({
-    filename: 'css/[name].min.css',
-  })],
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].min.css',
+    }),
+    new ESLintPlugin(),
+	/*new webpack.ProvidePlugin({
+      '$': 'jquery',
+      'jQuery': 'jquery',
+    }),*/
+  ],
   optimization: {
     minimizer: [
       new TerserPlugin({
@@ -59,11 +77,11 @@ module.exports = {
             },
           ],
         },
-      })
+      }),
     ],
   },
   performance: {
-    maxEntrypointSize: 400000,
+    maxEntrypointSize: 512000,
   },
   stats: {
     children: true

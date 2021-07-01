@@ -1,0 +1,19 @@
+{
+  "parser": "@babel/eslint-parser",
+  "extends": [
+    "eslint:recommended"
+  ],
+  "rules": {
+    "no-undef": "warn",
+    "no-unused-vars": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "jquery": true
+  },
+  "globals": {
+    "$": "readonly",
+    "jQuery": "readonly"
+  }
+}
